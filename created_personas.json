@@ -1,0 +1,47 @@
+[
+    {
+        "persona_id": "pcf32a01c3e4",
+        "persona_name": "config a baseline clinical coach",
+        "created_at": "2026-01-21T21:38:07.736550Z"
+    },
+    {
+        "persona_id": "p71e44664e85",
+        "persona_name": "config b ultra gentle slow paced",
+        "created_at": "2026-01-21T21:38:09.145660Z"
+    },
+    {
+        "persona_id": "p5c308f7dd44",
+        "persona_name": "config c high responsiveness engaging flow",
+        "created_at": "2026-01-21T21:38:10.585242Z"
+    },
+    {
+        "persona_id": "p4d921b1a0f2",
+        "persona_name": "config d high accuracy safety conservative",
+        "created_at": "2026-01-21T21:38:11.996267Z"
+    },
+    {
+        "persona_id": "p2da6299c4b1",
+        "persona_name": "config e insight focused bounded exploratory",
+        "created_at": "2026-01-21T21:38:13.383180Z"
+    },
+    {
+        "persona_id": "p942a2060a31",
+        "persona_name": "config f somatic centric coach",
+        "created_at": "2026-01-21T21:38:14.846232Z"
+    },
+    {
+        "persona_id": "p41be5fa3d6b",
+        "persona_name": "config g emotion attuned coach",
+        "created_at": "2026-01-21T21:38:16.321728Z"
+    },
+    {
+        "persona_id": "pa1d32910037",
+        "persona_name": "config h micro coach ultra concise",
+        "created_at": "2026-01-21T21:38:17.771915Z"
+    },
+    {
+        "persona_id": "p5da1425a456",
+        "persona_name": "config i warm mentor",
+        "created_at": "2026-01-21T21:38:19.204661Z"
+    }
+]

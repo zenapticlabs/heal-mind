@@ -1,0 +1,217 @@
+{
+  "config-a-baseline-clinical-coach": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "off"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "sparrow-1",
+        "turn_taking_patience": "medium",
+        "replica_interruptibility": "medium",
+        "turn_commitment": "medium",
+        "active_listening": "medium"
+      },
+      "llm": {
+        "model": "tavus-llama-4",
+        "temperature": 0.4,
+        "speculative_inference": true
+      }
+    },
+    "memory": "off",
+    "document_retrieval_strategy": "balanced"
+  },
+
+  "config-b-ultra-gentle-slow-paced": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "off"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "time-based",
+        "turn_taking_patience": "high",
+        "replica_interruptibility": "high",
+        "turn_commitment": "low",
+        "active_listening": "low"
+      },
+      "llm": {
+        "model": "tavus-llama-4",
+        "temperature": 0.3,
+        "speculative_inference": false
+      }
+    },
+    "memory": "off",
+    "document_retrieval_strategy": "quality"
+  },
+
+  "config-c-high-responsiveness-engaging-flow": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "off"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "sparrow-1",
+        "turn_taking_patience": "low",
+        "replica_interruptibility": "medium",
+        "turn_commitment": "high",
+        "active_listening": "high"
+      },
+      "llm": {
+        "model": "tavus-gpt-4o-mini",
+        "temperature": 0.6,
+        "speculative_inference": true
+      }
+    },
+    "memory": "off",
+    "document_retrieval_strategy": "speed"
+  },
+
+  "config-d-high-accuracy-safety-conservative": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "off"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "sparrow-0",
+        "turn_taking_patience": "medium",
+        "replica_interruptibility": "high",
+        "active_listening": "low",
+        "turn_commitment": "low"
+      },
+      "llm": {
+        "model": "tavus-llama-4",
+        "temperature": 0.1,
+        "speculative_inference": false
+      }
+    },
+    "memory": "off",
+    "document_retrieval_strategy": "quality"
+  },
+
+  "config-e-insight-focused-bounded-exploratory": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "off"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "sparrow-1",
+        "turn_taking_patience": "medium",
+        "replica_interruptibility": "medium",
+        "turn_commitment": "medium",
+        "active_listening": "medium"
+      },
+      "llm": {
+        "model": "tavus-gpt-4o",
+        "temperature": 0.7,
+        "speculative_inference": true
+      }
+    },
+    "memory": "session",
+    "document_retrieval_strategy": "balanced"
+  },
+
+  "config-f-somatic-centric-coach": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "basic"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "sparrow-1",
+        "turn_taking_patience": "medium",
+        "replica_interruptibility": "high",
+        "turn_commitment": "medium",
+        "active_listening": "medium"
+      },
+      "llm": {
+        "model": "tavus-llama-4",
+        "temperature": 0.4,
+        "speculative_inference": true
+      }
+    },
+    "memory": "off",
+    "document_retrieval_strategy": "quality"
+  },
+
+  "config-g-emotion-attuned-coach": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "off"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "sparrow-1",
+        "turn_taking_patience": "medium",
+        "replica_interruptibility": "medium",
+        "turn_commitment": "medium",
+        "active_listening": "high"
+      },
+      "llm": {
+        "model": "tavus-gpt-4o",
+        "temperature": 0.5,
+        "speculative_inference": true
+      }
+    },
+    "memory": "off",
+    "document_retrieval_strategy": "balanced"
+  },
+
+  "config-h-micro-coach-ultra-concise": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "off"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "sparrow-1",
+        "turn_taking_patience": "low",
+        "replica_interruptibility": "high",
+        "turn_commitment": "low",
+        "active_listening": "low"
+      },
+      "llm": {
+        "model": "tavus-llama-4",
+        "temperature": 0.3,
+        "speculative_inference": true
+      }
+    },
+    "memory": "off",
+    "document_retrieval_strategy": "speed"
+  },
+
+  "config-i-warm-mentor": {
+    "pipeline_mode": "full",
+    "system_prompt": "",
+    "layers": {
+      "perception": {
+        "perception_model": "off"
+      },
+      "conversational_flow": {
+        "turn_detection_model": "sparrow-1",
+        "turn_taking_patience": "medium",
+        "replica_interruptibility": "medium",
+        "turn_commitment": "medium",
+        "active_listening": "medium"
+      },
+      "llm": {
+        "model": "tavus-gpt-4o-mini",
+        "temperature": 0.6,
+        "speculative_inference": true
+      }
+    },
+    "memory": "off",
+    "document_retrieval_strategy": "balanced"
+  }
+}

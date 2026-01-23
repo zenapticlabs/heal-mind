@@ -1,0 +1,20 @@
+{
+    "pipeline_mode": "<pipeline_mode>",
+    "system_prompt": "<system_prompt>",
+    "layers": {
+        "perception": {
+            "perception_model": "<perception_model>"
+        },
+        "conversational_flow": {
+            "turn_detection_model": "<turn_detection_model>",
+            "turn_taking_patience": "<turn_taking_patience>",
+            "replica_interruptibility": "<replica_interruptibility>"
+        },
+        "llm": {
+            "model": "<llm_model>",
+            "temperature": "<llm_temperature>",
+            "speculative_inference": "<speculative_inference>"
+
+        }
+    }
+}
