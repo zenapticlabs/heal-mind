@@ -121,7 +121,7 @@ export function App({ appConfig }: AppProps) {
 
       <div className="pointer-events-none fixed top-4 left-4 z-50 flex gap-2">
         <Button
-          className="pointer-events-auto bg-black text-white shadow-sm ring-1 ring-white/90 transition-all hover:bg-black hover:shadow-xl hover:brightness-110 active:shadow-md focus-visible:ring-2 focus-visible:ring-white/60"
+          className="pointer-events-auto bg-black text-white/80 hover:text-white/100 shadow-sm ring-1 ring-white/80 transition-all hover:bg-black hover:ring-white/100 hover:shadow-xl hover:brightness-110 active:shadow-md focus-visible:ring-2 focus-visible:ring-white/60"
           variant="secondary"
           onClick={() => setPromptDialogOpen(true)}
         >
