@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { AccessToken, type AccessTokenOptions, type VideoGrant } from 'livekit-server-sdk';
 import { RoomConfiguration } from '@livekit/protocol';
+
 // import { APP_CONFIG_DEFAULTS } from '@'
 
 type ConnectionDetails = {
@@ -9,6 +10,27 @@ type ConnectionDetails = {
   participantName: string;
   participantToken: string;
 };
+
+type EndpointTokenRequest = {
+  room_name?: string;
+  participant_name?: string;
+  participant_identity?: string;
+  participant_metadata?: string;
+  participant_attributes?: Record<string, string>;
+  room_config?: unknown;
+};
+
+function getAgentName(roomConfig: unknown): string | undefined {
+  if (roomConfig && typeof roomConfig === 'object') {
+    const agents = (roomConfig as { agents?: unknown }).agents;
+    if (Array.isArray(agents)) {
+      const first = agents[0] as { agent_name?: unknown } | undefined;
+      const name = first?.agent_name;
+      if (typeof name === 'string') return name;
+    }
+  }
+  return undefined;
+}
 
 // NOTE: you are expected to define the following environment variables in `.env.local`:
 const API_KEY = process.env.LIVEKIT_API_KEY;
@@ -30,17 +52,23 @@ export async function POST(req: Request) {
       throw new Error('LIVEKIT_API_SECRET is not defined');
     }
 
-    // Parse agent configuration from request body
-    const body = await req.json();
-    const agentName: string = body?.room_config?.agents?.[0]?.agent_name;
+    // Parse request body according to LiveKit endpoint token schema.
+    // https://docs.livekit.io/frontends/authentication/tokens/endpoint/#endpoint-schema
+    const body = (await req.json().catch(() => ({}))) as EndpointTokenRequest;
+    const agentName = getAgentName(body.room_config);
 
-    // Generate participant token
-    const participantName = 'user';
-    const participantIdentity = `voice_assistant_user_${Math.floor(Math.random() * 10_000)}`;
-    const roomName = `voice_assistant_room_${Math.floor(Math.random() * 10_000)}`;
+    const participantName = body.participant_name ?? 'user';
+    const participantIdentity =
+      body.participant_identity ?? `voice_assistant_user_${Math.floor(Math.random() * 10_000)}`;
+    const roomName = body.room_name ?? `voice_assistant_room_${Math.floor(Math.random() * 10_000)}`;
 
     const participantToken = await createParticipantToken(
-      { identity: participantIdentity, name: participantName },
+      {
+        identity: participantIdentity,
+        name: participantName,
+        metadata: body.participant_metadata,
+        attributes: body.participant_attributes,
+      },
       roomName,
       agentName
     );
@@ -79,6 +107,9 @@ function createParticipantToken(
     canPublish: true,
     canPublishData: true,
     canSubscribe: true,
+    // Required to allow the web client to change its own participant metadata/attributes
+    // mid-session (e.g., to update prompt overrides without reconnecting).
+    canUpdateOwnMetadata: true,
   };
   at.addGrant(grant);
 
