@@ -1,4 +1,4 @@
-import logging, os, json
+import logging, os, json, asyncio
 from collections.abc import Callable
 from templates import SYSTEM_PROMPT
 from dotenv import load_dotenv
@@ -20,6 +20,8 @@ logger = logging.getLogger("agent")
 
 load_dotenv(".env.local")
 
+global instructions
+instructions = SYSTEM_PROMPT
 
 class Assistant(Agent):
     def __init__(
@@ -43,7 +45,7 @@ class Assistant(Agent):
         override = self._get_prompt_override()
         if not override:
             return instructions
-        return instructions + "\n\n# Frontend prompt override\n" + override
+        return override
     async def on_enter(self):
         """Called when the agent enters the session."""
         await self.session.generate_reply(
@@ -87,7 +89,7 @@ server.setup_fnc = prewarm
 
 @server.rtc_session()
 async def my_agent(ctx: JobContext):
-    
+    global instructions
     ctx.log_context_fields = {
         "room": ctx.room.name,
     }
@@ -128,7 +130,7 @@ async def my_agent(ctx: JobContext):
         changed_participant: rtc.Participant, old_metadata: str, new_metadata: str
     ):
         nonlocal prompt_override, participant
-
+        global instructions
         # Only apply updates from the linked participant (the human).
         # If we haven't captured it yet, accept the first participant that updates.
         if participant is not None and changed_participant.identity != participant.identity:
@@ -142,9 +144,60 @@ async def my_agent(ctx: JobContext):
             len(prompt_override) if prompt_override else 0,
         )
 
+        # NOTE: this updates the live LLM instructions for the current room session.
         instructions = prompt_override if prompt_override else SYSTEM_PROMPT
-    
+
         ctx.room.agent.llm.set_instructions(instructions)
+
+    # Data-packet protocol for prompt edit UX.
+    # Frontend publishes: topic="healmind.prompt.get", payload={"requestId": "..."}
+    # Agent responds:      topic="healmind.prompt.current", payload={"requestId": "...", "prompt": "..."}
+    #
+    # (We only send to the requesting participant identity to avoid leaking prompt text.)
+    @ctx.room.on("data_received")
+    def on_data_received(packet: rtc.DataPacket):
+        nonlocal participant
+        global instructions
+        try:
+            topic = getattr(packet, "topic", None)
+            if topic != "healmind.prompt.get":
+                return
+
+            # If we already know the linked participant, only accept requests from them.
+            if participant is not None and packet.participant.identity != participant.identity:
+                return
+            if participant is None:
+                participant = packet.participant
+
+            raw = packet.data
+            if isinstance(raw, (bytes, bytearray)):
+                raw = raw.decode("utf-8", errors="replace")
+
+            request_id: str | None = None
+            try:
+                body = json.loads(raw) if raw else {}
+                if isinstance(body, dict):
+                    rid = body.get("requestId")
+                    if isinstance(rid, str):
+                        request_id = rid
+            except Exception:
+                logger.warning("Failed to parse prompt.get data request payload", exc_info=True)
+                pass
+
+            payload = json.dumps({"requestId": request_id, "prompt": instructions})
+
+            task = asyncio.create_task(
+                ctx.room.local_participant.publish_data(
+                    payload,
+                    reliable=True,
+                    destination_identities=[packet.participant.identity],
+                    topic="healmind.prompt.current",
+                )
+            )
+            logger.info("Responded to prompt.get data request: Launched task %s", task)
+        except Exception:
+            logger.exception("Failed handling data_received prompt request")
+
     session = AgentSession(
         stt=inference.STT(model="elevenlabs/scribe_v2_realtime"),
         llm=inference.LLM(model="openai/gpt-4o"),
@@ -166,7 +219,7 @@ async def my_agent(ctx: JobContext):
     await avatar.start(session, room=ctx.room)
 
     # Start the session, which initializes the voice pipeline and warms up the models
-    agent = Assistant(instructions=prompt_override if prompt_override else SYSTEM_PROMPT, get_prompt_override=lambda: prompt_override)
+    agent = Assistant(instructions=instructions, get_prompt_override=lambda: prompt_override)
     await session.start(
         agent=agent,
         room=ctx.room,

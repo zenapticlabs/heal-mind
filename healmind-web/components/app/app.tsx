@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { TokenSource } from 'livekit-client';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { RoomEvent, TokenSource } from 'livekit-client';
 import { toast } from 'sonner';
 import { useSession } from '@livekit/components-react';
 import { WarningIcon } from '@phosphor-icons/react/dist/ssr';
@@ -31,6 +31,7 @@ interface AppProps {
 export function App({ appConfig }: AppProps) {
   const [promptDialogOpen, setPromptDialogOpen] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
+  const openRequestIdRef = useRef<string | null>(null);
 
   const tokenSource = useMemo(() => {
     // If a sandbox endpoint is configured, keep using it as-is.
@@ -85,6 +86,62 @@ export function App({ appConfig }: AppProps) {
 
   const session = useSession(tokenSource);
 
+  // Listen for prompt responses from the agent and populate the textarea.
+  useEffect(() => {
+    const room = session?.room;
+    if (!room) return;
+
+    const decoder = new TextDecoder();
+    const handler = (payload: Uint8Array, _participant: unknown, _kind: unknown, topic?: string) => {
+      if (topic !== 'healmind.prompt.current') return;
+      try {
+        const text = decoder.decode(payload);
+        const data = JSON.parse(text) as { requestId?: string | null; prompt?: string };
+        const expected = openRequestIdRef.current;
+
+        // If a requestId is set, only accept the matching response.
+        if (expected && data.requestId && data.requestId !== expected) return;
+
+        // If we requested a prompt, accept the response.
+        if (typeof data.prompt === 'string') {
+          setCustomPrompt(data.prompt);
+        }
+        // Clear request id after we handled the response.
+        openRequestIdRef.current = null;
+      } catch (err) {
+        console.warn('Failed to parse prompt response payload', err);
+      }
+    };
+
+    // livekit-client passes (payload, participant, kind, topic)
+    room.on(RoomEvent.DataReceived, handler as never);
+    return () => {
+      room.off(RoomEvent.DataReceived, handler as never);
+    };
+  }, [session?.room]);
+
+  async function requestPromptFromAgent() {
+    const room = session?.room;
+    const local = room?.localParticipant;
+    if (!room || !local || room.state !== 'connected') {
+      return;
+    }
+
+    try {
+      // Use WebCrypto when available; fall back to Math.random.
+      const requestId =
+        typeof crypto !== 'undefined' && 'randomUUID' in crypto
+          ? crypto.randomUUID()
+          : String(Math.random()).slice(2);
+      openRequestIdRef.current = requestId;
+
+      const payload = new TextEncoder().encode(JSON.stringify({ requestId }));
+      await local.publishData(payload, { reliable: true, topic: 'healmind.prompt.get' });
+    } catch (err) {
+      console.warn('Failed to request prompt from agent', err);
+    }
+  }
+
   async function applyPromptUpdate() {
     // Update local participant metadata mid-session.
     // This triggers `participant_metadata_changed` for connected clients and agents.
@@ -123,7 +180,11 @@ export function App({ appConfig }: AppProps) {
         <Button
           className="pointer-events-auto bg-black text-white/80 hover:text-white/100 shadow-sm ring-1 ring-white/80 transition-all hover:bg-black hover:ring-white/100 hover:shadow-xl hover:brightness-110 active:shadow-md focus-visible:ring-2 focus-visible:ring-white/60"
           variant="secondary"
-          onClick={() => setPromptDialogOpen(true)}
+          onClick={async () => {
+            setPromptDialogOpen(true);
+            // Pull current prompt from backend (agent) to pre-fill the textarea.
+            await requestPromptFromAgent();
+          }}
         >
           Edit Prompt
         </Button>
