@@ -86,6 +86,26 @@ export function App({ appConfig }: AppProps) {
 
   const session = useSession(tokenSource);
 
+  // Load default prompt from /public/prompt.txt on frontend boot.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/prompt.txt', { cache: 'no-store' });
+        if (!res.ok) return;
+        const text = await res.text();
+        if (cancelled) return;
+        // Only set if the user hasn't typed anything yet.
+        setCustomPrompt((prev) => (prev.trim().length ? prev : text));
+      } catch (err) {
+        console.warn('Failed to load /prompt.txt', err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   // Listen for prompt responses from the agent and populate the textarea.
   useEffect(() => {
     const room = session?.room;

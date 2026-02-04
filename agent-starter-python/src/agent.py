@@ -1,4 +1,5 @@
 import logging, os, json, asyncio
+from pathlib import Path
 from collections.abc import Callable
 from templates import SYSTEM_PROMPT
 from dotenv import load_dotenv
@@ -20,20 +21,42 @@ logger = logging.getLogger("agent")
 
 load_dotenv(".env.local")
 
-global instructions
-instructions = SYSTEM_PROMPT
+PROMPT_PATH = Path(__file__).resolve().parents[2] / "prompt.txt"
+
+
+def _read_prompt_file() -> str:
+    try:
+        text = PROMPT_PATH.read_text(encoding="utf-8")
+        return text.strip("\n")
+    except FileNotFoundError:
+        logger.warning("prompt.txt not found at %s; falling back to templates.SYSTEM_PROMPT", PROMPT_PATH)
+    except Exception:
+        logger.exception("Failed reading prompt.txt from %s; falling back to templates.SYSTEM_PROMPT", PROMPT_PATH)
+    return SYSTEM_PROMPT
+
+
+def _write_prompt_file(text: str) -> None:
+    try:
+        PROMPT_PATH.write_text(text, encoding="utf-8")
+    except Exception:
+        logger.exception("Failed writing prompt.txt to %s", PROMPT_PATH)
+
+
+# Base prompt comes from prompt.txt if present.
+system_prompt = _read_prompt_file()
+
+# Current active prompt for the room/session (may be overridden by participant metadata).
+current_prompt = system_prompt
 
 class Assistant(Agent):
     def __init__(
         self,
         *,
         instructions: str | None = None,
-    get_prompt_override: Callable[[], str | None] | None = None,
+        get_prompt_override: Callable[[], str | None] | None = None,
     ) -> None:
         if instructions is None:
-            instructions = (
-                SYSTEM_PROMPT
-            )
+            instructions = SYSTEM_PROMPT
         super().__init__(
             instructions=instructions,
         )
@@ -45,7 +68,7 @@ class Assistant(Agent):
         override = self._get_prompt_override()
         if not override:
             return instructions
-        return override
+
     async def on_enter(self):
         """Called when the agent enters the session."""
         await self.session.generate_reply(
@@ -89,7 +112,7 @@ server.setup_fnc = prewarm
 
 @server.rtc_session()
 async def my_agent(ctx: JobContext):
-    global instructions
+    global system_prompt, current_prompt
     ctx.log_context_fields = {
         "room": ctx.room.name,
     }
@@ -130,7 +153,8 @@ async def my_agent(ctx: JobContext):
         changed_participant: rtc.Participant, old_metadata: str, new_metadata: str
     ):
         nonlocal prompt_override, participant
-        global instructions
+        global system_prompt, current_prompt
+
         # Only apply updates from the linked participant (the human).
         # If we haven't captured it yet, accept the first participant that updates.
         if participant is not None and changed_participant.identity != participant.identity:
@@ -144,10 +168,14 @@ async def my_agent(ctx: JobContext):
             len(prompt_override) if prompt_override else 0,
         )
 
-        # NOTE: this updates the live LLM instructions for the current room session.
-        instructions = prompt_override if prompt_override else SYSTEM_PROMPT
+        # Base is system_prompt from prompt.txt, overridden by participant metadata prompt.
+        current_prompt = prompt_override if prompt_override else system_prompt
 
-        ctx.room.agent.llm.set_instructions(instructions)
+        # Persist the latest prompt to prompt.txt (source of truth across restarts).
+        _write_prompt_file(current_prompt)
+
+        # Update live LLM instructions for the current room session.
+        ctx.room.agent.llm.set_instructions(current_prompt)
 
     # Data-packet protocol for prompt edit UX.
     # Frontend publishes: topic="healmind.prompt.get", payload={"requestId": "..."}
@@ -157,7 +185,7 @@ async def my_agent(ctx: JobContext):
     @ctx.room.on("data_received")
     def on_data_received(packet: rtc.DataPacket):
         nonlocal participant
-        global instructions
+        global current_prompt
         try:
             topic = getattr(packet, "topic", None)
             if topic != "healmind.prompt.get":
@@ -184,7 +212,7 @@ async def my_agent(ctx: JobContext):
                 logger.warning("Failed to parse prompt.get data request payload", exc_info=True)
                 pass
 
-            payload = json.dumps({"requestId": request_id, "prompt": instructions})
+            payload = json.dumps({"requestId": request_id, "prompt": current_prompt})
 
             task = asyncio.create_task(
                 ctx.room.local_participant.publish_data(
@@ -219,7 +247,9 @@ async def my_agent(ctx: JobContext):
     await avatar.start(session, room=ctx.room)
 
     # Start the session, which initializes the voice pipeline and warms up the models
-    agent = Assistant(instructions=instructions, get_prompt_override=lambda: prompt_override)
+    # Use prompt.txt system_prompt as the base instructions.
+    # prompt_override (from participant metadata) is appended for turn-level instructions.
+    agent = Assistant(instructions=current_prompt, get_prompt_override=lambda: prompt_override)
     await session.start(
         agent=agent,
         room=ctx.room,
