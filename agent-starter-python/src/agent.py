@@ -1,4 +1,5 @@
 import logging, os, json, asyncio
+import time
 from pathlib import Path
 from collections.abc import Callable
 from templates import SYSTEM_PROMPT
@@ -48,6 +49,112 @@ system_prompt = _read_prompt_file()
 # Current active prompt for the room/session (may be overridden by participant metadata).
 current_prompt = system_prompt
 
+
+class SilenceNudger:
+    """Schedules a short agent nudge after a period of user silence.
+
+    This is intentionally implemented as a small helper instead of relying on
+    `user_away_timeout`, because we want a short (7s) check-in without marking
+    the user as truly "away".
+    """
+
+    def __init__(
+        self,
+        session: AgentSession,
+        *,
+        silence_seconds: float = 7.0,
+        cooldown_seconds: float = 30.0,
+        max_nudges: int = 3,
+        nudge_instructions: str | None = None,
+    ) -> None:
+        self._session = session
+        self._silence_seconds = float(silence_seconds)
+        self._cooldown_seconds = float(cooldown_seconds)
+        self._max_nudges = int(max_nudges)
+        self._nudge_instructions = (
+            nudge_instructions
+            or "If the user has been quiet, gently check in with a short, warm question. Keep it to one sentence."
+        )
+
+        self._task: asyncio.Task[None] | None = None
+        self._last_nudge_at: float | None = None
+        self._nudges_sent: int = 0
+        self._closed = False
+
+        @session.on("agent_state_changed")
+        def _on_agent_state_changed(ev):
+            # ev.new_state: "speaking" | "listening" | "away" (docs)
+            if self._closed:
+                return
+            try:
+                new_state = getattr(ev, "new_state", None)
+                if new_state == "speaking":
+                    self.cancel()
+                    logger.debug("SilenceNudger_: Agent started speaking; cancelled nudge")
+                elif new_state == "listening":
+                    self.schedule()
+                    logger.debug("SilenceNudger_: Agent started listening; scheduled nudge")
+                elif new_state == "away":
+                    # Don't auto-nudge on away by default; we handle short silence ourselves.
+                    pass
+            except Exception:
+                logger.exception("SilenceNudger_ failed handling agent_state_changed")
+
+        @session.on("close")
+        def _on_close(_ev=None):
+            self.close()
+
+    def close(self) -> None:
+        self._closed = True
+        self.cancel()
+
+    def cancel(self) -> None:
+        task = self._task
+        self._task = None
+        if task is not None and not task.done():
+            task.cancel()
+
+    def schedule(self) -> None:
+        if self._closed:
+            return
+        # Already scheduled.
+        if self._task is not None and not self._task.done():
+            return
+        self._task = asyncio.create_task(self._run())
+
+    def _cooldown_ok(self) -> bool:
+        if self._last_nudge_at is None:
+            return True
+        return (time.monotonic() - self._last_nudge_at) >= self._cooldown_seconds
+
+    async def _run(self) -> None:
+        try:
+            await asyncio.sleep(self._silence_seconds)
+
+            if self._closed:
+                return
+
+            # Basic anti-spam.
+            if self._nudges_sent >= self._max_nudges:
+                return
+            if not self._cooldown_ok():
+                return
+
+            # Don't nudge if the agent is currently speaking/thinking.
+            # (AgentSession exposes agent_state_changed events; there's no hard guarantee
+            # of a stable property, so we simply check active speech when available.)
+            if getattr(self._session, "current_speech", None):
+                return
+
+            # Prefer LLM-generated nudges so they match persona/tone. Keep it short.
+            self._last_nudge_at = time.monotonic()
+            self._nudges_sent += 1
+            await self._session.generate_reply(instructions=self._nudge_instructions)
+        except asyncio.CancelledError:
+            return
+        except Exception:
+            logger.exception("SilenceNudger failed while running")
+
 class Assistant(Agent):
     def __init__(
         self,
@@ -68,6 +175,7 @@ class Assistant(Agent):
         override = self._get_prompt_override()
         if not override:
             return instructions
+        return f"{instructions}\n\nAdditional instructions for this session:\n{override}"
 
     async def on_enter(self):
         """Called when the agent enters the session."""
@@ -113,6 +221,7 @@ server.setup_fnc = prewarm
 @server.rtc_session()
 async def my_agent(ctx: JobContext):
     global system_prompt, current_prompt
+    nudger: SilenceNudger | None = None
     ctx.log_context_fields = {
         "room": ctx.room.name,
     }
@@ -177,6 +286,29 @@ async def my_agent(ctx: JobContext):
         # Update live LLM instructions for the current room session.
         ctx.room.agent.llm.set_instructions(current_prompt)
 
+    # @ctx.room.on("agent_state_changed")
+    # def _on_agent_state_changed(ev):
+    #     # ev.new_state: "speaking" | "listening" | "away" (docs)
+    #     if nudger._closed:
+    #         return
+    #     try:
+    #         new_state = getattr(ev, "new_state", None)
+    #         if new_state == "speaking":
+    #             nudger.cancel()
+    #             logger.debug("SilenceNudger: Agent started speaking; cancelled nudge")
+    #         elif new_state == "listening":
+    #             nudger.schedule()
+    #             logger.debug("SilenceNudger: Agent started listening; scheduled nudge")
+    #         elif new_state == "away":
+    #             # Don't auto-nudge on away by default; we handle short silence ourselves.
+    #             pass
+    #     except Exception:
+    #         logger.exception("SilenceNudger failed handling agent_state_changed")
+
+    # @ctx.room.on("close")
+    # def _on_close(_ev=None):
+    #     nudger.close()
+
     # Data-packet protocol for prompt edit UX.
     # Frontend publishes: topic="healmind.prompt.get", payload={"requestId": "..."}
     # Agent responds:      topic="healmind.prompt.current", payload={"requestId": "...", "prompt": "..."}
@@ -225,7 +357,6 @@ async def my_agent(ctx: JobContext):
             logger.info("Responded to prompt.get data request: Launched task %s", task)
         except Exception:
             logger.exception("Failed handling data_received prompt request")
-
     session = AgentSession(
         stt=inference.STT(model="elevenlabs/scribe_v2_realtime"),
         llm=inference.LLM(model="openai/gpt-4o"),
@@ -237,6 +368,13 @@ async def my_agent(ctx: JobContext):
         vad=ctx.proc.userdata["vad"],
         preemptive_generation=True,
     )
+    nudger = SilenceNudger(
+        session=session,
+        silence_seconds=15,
+        cooldown_seconds=40,
+        nudge_instructions="The user has been silent for a while. Tell him to continue speaking.",
+    )
+    # nudger.start()
 
     tavus = __import__("livekit.plugins.tavus", fromlist=["AvatarSession"])
     avatar = tavus.AvatarSession(
@@ -259,6 +397,10 @@ async def my_agent(ctx: JobContext):
             ),
         ),
     )
+
+    # Nudge after 7 seconds of user silence.
+    # Uses user_state_changed (speaking/listening) + an asyncio timer.
+    
 
     # Note: to apply prompt updates to every turn, thread `prompt_override` into
     # your normal conversation loop/tooling. Here we at least include it in

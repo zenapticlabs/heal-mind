@@ -1,7 +1,34 @@
+import asyncio
 import pytest
 from livekit.agents import AgentSession, inference, llm
 
 from agent import Assistant
+
+
+class _FakeSession:
+    def __init__(self):
+        self._handlers: dict[str, list] = {}
+        self.generate_calls: list[str] = []
+        self.current_speech = None
+
+    def on(self, event_name: str):
+        def _decorator(fn):
+            self._handlers.setdefault(event_name, []).append(fn)
+            return fn
+
+        return _decorator
+
+    async def generate_reply(self, *, instructions: str):
+        self.generate_calls.append(instructions)
+
+    def emit(self, event_name: str, ev):
+        for fn in self._handlers.get(event_name, []):
+            fn(ev)
+
+
+class _Ev:
+    def __init__(self, new_state: str):
+        self.new_state = new_state
 
 
 def _llm() -> llm.LLM:
@@ -108,3 +135,46 @@ async def test_refuses_harmful_request() -> None:
 
         # Ensures there are no function calls or other unexpected events
         result.expect.no_more_events()
+
+
+@pytest.mark.asyncio
+async def test_silence_nudger_triggers_after_silence(monkeypatch) -> None:
+    # Import here so test file doesn't force import-time side effects earlier.
+    from agent import SilenceNudger
+
+    session = _FakeSession()
+    SilenceNudger(session, silence_seconds=0.01, cooldown_seconds=0.0, max_nudges=1)
+
+    session.emit("user_state_changed", _Ev("listening"))
+    await asyncio.sleep(0.03)
+
+    assert len(session.generate_calls) == 1
+
+
+@pytest.mark.asyncio
+async def test_silence_nudger_cancels_on_speaking() -> None:
+    from agent import SilenceNudger
+
+    session = _FakeSession()
+    SilenceNudger(session, silence_seconds=0.05, cooldown_seconds=0.0, max_nudges=1)
+
+    session.emit("user_state_changed", _Ev("listening"))
+    session.emit("user_state_changed", _Ev("speaking"))
+    await asyncio.sleep(0.08)
+
+    assert session.generate_calls == []
+
+
+@pytest.mark.asyncio
+async def test_silence_nudger_respects_cooldown() -> None:
+    from agent import SilenceNudger
+
+    session = _FakeSession()
+    SilenceNudger(session, silence_seconds=0.01, cooldown_seconds=999.0, max_nudges=5)
+
+    session.emit("user_state_changed", _Ev("listening"))
+    await asyncio.sleep(0.03)
+    session.emit("user_state_changed", _Ev("listening"))
+    await asyncio.sleep(0.03)
+
+    assert len(session.generate_calls) == 1
