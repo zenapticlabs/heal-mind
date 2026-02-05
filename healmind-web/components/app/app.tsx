@@ -196,14 +196,16 @@ export function App({ appConfig }: AppProps) {
         <ViewController appConfig={appConfig} />
       </main>
 
-      <div className="pointer-events-none fixed top-4 left-4 z-50 flex gap-2">
+      <div className="fixed left-4 top-4 z-50 flex gap-2">
         <Button
-          className="pointer-events-auto bg-black text-white/80 hover:text-white/100 shadow-sm ring-1 ring-white/80 transition-all hover:bg-black hover:ring-white/100 hover:shadow-xl hover:brightness-110 active:shadow-md focus-visible:ring-2 focus-visible:ring-white/60"
-          variant="secondary"
+          variant="ghost"
+          // Explicitly set both modes; avoid inline style (it was forcing white in dark mode).
+          className="border border-black/80 bg-white text-black/80 shadow-sm transition-all hover:bg-white hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/110
+             dark:border-white/80 dark:bg-black dark:text-white/80 dark:hover:bg-black dark:focus-visible:ring-white/60 dark:hover:text-white/100 dark:hover:border-white/100" 
           onClick={async () => {
-            setPromptDialogOpen(true);
-            // Pull current prompt from backend (agent) to pre-fill the textarea.
-            await requestPromptFromAgent();
+        setPromptDialogOpen(true);
+        // Pull current prompt from backend (agent) to pre-fill the textarea.
+        await requestPromptFromAgent();
           }}
         >
           Edit Prompt
@@ -221,7 +223,7 @@ export function App({ appConfig }: AppProps) {
             </div>
 
             <p className="text-muted-foreground mb-2 text-sm">
-              This prompt is stored in your LiveKit <code>participant_metadata</code>. If
+              This prompt used in your agent. If
               you&apos;re already connected, saving will update it immediately.
             </p>
 

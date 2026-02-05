@@ -12,6 +12,8 @@ const publicSans = Public_Sans({
   subsets: ['latin'],
 });
 
+
+
 const commitMono = localFont({
   display: 'swap',
   variable: '--font-commit-mono',
@@ -47,8 +49,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const hdrs = await headers();
   const appConfig = await getAppConfig(hdrs);
   const styles = getStyles(appConfig);
-  const { pageTitle, pageDescription, companyName, logo, logoDark } = appConfig;
-
+  const { pageTitle, pageDescription, companyName, aa, aaa } = appConfig;
+  const logo = '/healmind.png';
+  const logoDark = '/healmind.png';
   return (
     <html
       lang="en"
@@ -75,7 +78,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <a
               target="_blank"
               rel="noopener noreferrer"
-              href="https://livekit.io"
+              href="https://healmind.com/"
               className="scale-100 transition-transform duration-300 hover:scale-110"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -87,17 +90,24 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                 className="hidden size-6 dark:block"
               />
             </a>
-            <span className="text-foreground font-mono text-xs font-bold tracking-wider uppercase">
-              Built with{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://docs.livekit.io/agents"
-                className="underline underline-offset-4"
-              >
-                LiveKit Agents
-              </a>
-            </span>
+            <a
+              href="/"
+              aria-label={`${companyName} Home`}
+              className="flex items-center gap-2"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/healmind-light.png"
+                alt={`${companyName} Logo`}
+                className="block h-15 dark:hidden"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/healmind-dark.png"
+                alt={`${companyName} Logo`}
+                className="hidden h-15 dark:block"
+              />
+            </a>
           </header>
 
           {children}
