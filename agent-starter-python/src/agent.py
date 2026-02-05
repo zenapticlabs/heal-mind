@@ -370,8 +370,8 @@ async def my_agent(ctx: JobContext):
     )
     nudger = SilenceNudger(
         session=session,
-        silence_seconds=15,
-        cooldown_seconds=40,
+        silence_seconds=10,
+        cooldown_seconds=20,
         nudge_instructions="The user has been silent for a while. Tell him to continue speaking.",
     )
     # nudger.start()
