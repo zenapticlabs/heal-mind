@@ -9,7 +9,7 @@ from livekit.agents import (
     Agent,
     AgentServer,
     AgentSession,
-    JobContext,
+    JobContext, 
     JobProcess,
     cli,
     inference,
@@ -80,6 +80,7 @@ class SilenceNudger:
         self._last_nudge_at: float | None = None
         self._nudges_sent: int = 0
         self._closed = False
+        self._scheduled = False
 
         @session.on("agent_state_changed")
         def _on_agent_state_changed(ev):
@@ -111,16 +112,19 @@ class SilenceNudger:
     def cancel(self) -> None:
         task = self._task
         self._task = None
-        if task is not None and not task.done():
+        if task is not None and self._scheduled and not task.done():
             task.cancel()
+        self._scheduled = False
 
     def schedule(self) -> None:
         if self._closed:
             return
         # Already scheduled.
-        if self._task is not None and not self._task.done():
+        if self._task is not None and self._scheduled and not self._task.done():
             return
         self._task = asyncio.create_task(self._run())
+        self._scheduled = True
+        # logger.debug("SilenceNudger: Scheduled nudge task %s", self._task)
 
     def _cooldown_ok(self) -> bool:
         if self._last_nudge_at is None:
@@ -150,6 +154,7 @@ class SilenceNudger:
             self._last_nudge_at = time.monotonic()
             self._nudges_sent += 1
             await self._session.generate_reply(instructions=self._nudge_instructions)
+            self._scheduled = False
         except asyncio.CancelledError:
             return
         except Exception:
@@ -357,6 +362,7 @@ async def my_agent(ctx: JobContext):
             logger.info("Responded to prompt.get data request: Launched task %s", task)
         except Exception:
             logger.exception("Failed handling data_received prompt request")
+
     session = AgentSession(
         stt=inference.STT(model="elevenlabs/scribe_v2_realtime"),
         llm=inference.LLM(model="openai/gpt-4o"),
@@ -372,6 +378,7 @@ async def my_agent(ctx: JobContext):
         session=session,
         silence_seconds=10,
         cooldown_seconds=20,
+        max_nudges=3,
         nudge_instructions="The user has been silent for a while. Tell him to continue speaking.",
     )
     # nudger.start()
