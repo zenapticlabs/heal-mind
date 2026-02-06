@@ -26,7 +26,7 @@ const eslintConfig = [
       '@next/next/no-img-element': 'off',
       'react-hooks/exhaustive-deps': 'off',
       '@next/next/no-html-link-for-pages': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
+      "@typescript-eslint/ban-ts-ignore": "off",
 
     },
   },
