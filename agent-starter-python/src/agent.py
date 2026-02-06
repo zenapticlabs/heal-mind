@@ -223,7 +223,7 @@ def prewarm(proc: JobProcess):
 server.setup_fnc = prewarm
 
 
-@server.rtc_session()
+@server.rtc_session(agent_name="healmind-agent")
 async def my_agent(ctx: JobContext):
     global system_prompt, current_prompt
     nudger: SilenceNudger | None = None
