@@ -41,7 +41,7 @@ const TOGGLE_VARIANT_2 = [
   'dark:data-[state=on]:bg-blue-500/20 dark:data-[state=on]:text-blue-300',
 ];
 
-const MOTION_PROPS: any = {
+const MOTION_PROPS = {
   variants: {
     hidden: {
       height: 0,
