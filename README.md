@@ -1,11 +1,5 @@
 # healmind
 
-#### Changes are required to run default project in (add `ease` as const):
-- healmind-web/components/agents-ui/agent-control-bar.tsx
-- healmind-web/components/app/chat-transcript.tsx
-- healmind-web/components/app/session-view.tsx
-- healmind-web/components/app/tile-layout.tsx
-- healmind-web/components/app/view-controller.tsx
 
 #### Install pm2 globally:
 ```
@@ -57,3 +51,10 @@ git push -u origin feature-branch
 ```
 
 
+
+#### Changes are required to run default project in (add `ease` as const):
+- healmind-web/components/agents-ui/agent-control-bar.tsx
+- healmind-web/components/app/chat-transcript.tsx
+- healmind-web/components/app/session-view.tsx
+- healmind-web/components/app/tile-layout.tsx
+- healmind-web/components/app/view-controller.tsx
