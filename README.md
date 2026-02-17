@@ -42,6 +42,11 @@ pm2 logs healmind-web --err
 # 5) show the last N lines (useful if logs are noisy)
 pm2 logs healmind-web --lines 200
 ```
+#### Download Logs:
+```
+scp -i "healmind.pem" ubuntu@ec2-98-92-208-152.compute-1.amazonaws.com:/home/ubuntu/.pm2/logs/healmind-agent-out.log .
+```
+
 ### Git commands:
 
 #### Change branch (new/create: -c)

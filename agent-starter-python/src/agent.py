@@ -42,12 +42,14 @@ def _write_prompt_file(text: str) -> None:
     except Exception:
         logger.exception("Failed writing prompt.txt to %s", PROMPT_PATH)
 
-
+global current_prompt, current_llm_model, current_tts_model
 # Base prompt comes from prompt.txt if present.
 system_prompt = _read_prompt_file()
 
 # Current active prompt for the room/session (may be overridden by participant metadata).
 current_prompt = system_prompt
+current_llm_model = 'openai/gpt-4o'
+current_tts_model = 'elevenlabs/eleven_multilingual_v2'
 
 
 class SilenceNudger:
@@ -225,7 +227,7 @@ server.setup_fnc = prewarm
 
 @server.rtc_session()
 async def my_agent(ctx: JobContext):
-    global system_prompt, current_prompt
+    global system_prompt, current_prompt, current_llm_model, current_tts_model
     nudger: SilenceNudger | None = None
     ctx.log_context_fields = {
         "room": ctx.room.name,
@@ -240,13 +242,15 @@ async def my_agent(ctx: JobContext):
         try:
             meta = json.loads(metadata)
             if not isinstance(meta, dict):
-                return None
+                return None, None, None
             raw_prompt = meta.get("prompt")
+            current_llm_model = meta.get("llm")
+            current_tts_model = meta.get("tts")
             if isinstance(raw_prompt, str) and raw_prompt.strip():
-                return raw_prompt.strip()
+                return raw_prompt.strip(), current_llm_model, current_tts_model
         except Exception:
             logger.exception("Failed parsing participant metadata")
-        return None
+        return None, None, None
 
     # Read initial participant metadata (set by the frontend in the connection token).
     # Metadata is a freeform string (typically JSON).
@@ -254,7 +258,7 @@ async def my_agent(ctx: JobContext):
     participant: rtc.Participant | None = None
     try:
         participant = await ctx.wait_for_participant()
-        prompt_override = _extract_prompt_override(
+        prompt_override, current_llm_model, current_tts_model = _extract_prompt_override(
             getattr(participant, "metadata", None) if participant else None
         )
     except Exception:
@@ -267,7 +271,7 @@ async def my_agent(ctx: JobContext):
         changed_participant: rtc.Participant, old_metadata: str, new_metadata: str
     ):
         nonlocal prompt_override, participant
-        global system_prompt, current_prompt
+        global system_prompt, current_prompt, current_llm_model, current_tts_model
 
         # Only apply updates from the linked participant (the human).
         # If we haven't captured it yet, accept the first participant that updates.
@@ -276,20 +280,26 @@ async def my_agent(ctx: JobContext):
         if participant is None:
             participant = changed_participant
 
-        prompt_override = _extract_prompt_override(new_metadata)
+        prompt_override, llm_model_override, tts_model_override = _extract_prompt_override(new_metadata)
         logger.info(
-            "Prompt override updated via participant_metadata_changed (len=%s)",
-            len(prompt_override) if prompt_override else 0,
+            f"Participant_metadata_changed (prompt: {len(prompt_override) if prompt_override else 0}, model: {llm_model_override}, tts: {tts_model_override})"
         )
 
         # Base is system_prompt from prompt.txt, overridden by participant metadata prompt.
         current_prompt = prompt_override if prompt_override else system_prompt
+        current_tts_model = tts_model_override if tts_model_override else current_tts_model
+        current_llm_model = llm_model_override if llm_model_override else current_llm_model
 
         # Persist the latest prompt to prompt.txt (source of truth across restarts).
         _write_prompt_file(current_prompt)
 
         # Update live LLM instructions for the current room session.
-        ctx.room.agent.llm.set_instructions(current_prompt)
+        if prompt_override:
+            ctx.room.agent.llm.set_instructions(current_prompt)
+        if llm_model_override:
+            ctx.room.agent.llm.set_model(current_llm_model)
+        if tts_model_override:
+            ctx.room.agent.tts.set_model(current_tts_model)
 
     # @ctx.room.on("agent_state_changed")
     # def _on_agent_state_changed(ev):
@@ -365,15 +375,13 @@ async def my_agent(ctx: JobContext):
 
     session = AgentSession(
         stt=inference.STT(model="elevenlabs/scribe_v2_realtime"),
-        llm=inference.LLM(model="openai/gpt-4o"),
-        tts=__import__("livekit.plugins.elevenlabs", fromlist=["TTS"]).TTS(
-            model="eleven_multilingual_v2",
-            # voice_id=os.getenv("ELEVENLABS_VOICE_ID"),
-        ),
+        llm=inference.LLM(model=current_llm_model),
+        tts=inference.TTS(model=current_tts_model),
         turn_detection=MultilingualModel(),
         vad=ctx.proc.userdata["vad"],
         preemptive_generation=True,
     )
+    
     nudger = SilenceNudger(
         session=session,
         silence_seconds=10,

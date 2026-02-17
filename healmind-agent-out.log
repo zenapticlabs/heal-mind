@@ -1,0 +1,149 @@
+{"message": "starting worker", "level": "INFO", "name": "livekit.agents", "version": "1.3.11", "rtc-version": "1.0.23", "timestamp": "2026-02-06T01:45:49.796925+00:00"}
+{"message": "preloading plugins", "level": "INFO", "name": "livekit.agents", "packages": ["livekit.plugins.silero", "livekit.plugins.tavus", "livekit.plugins.turn_detector", "av"], "timestamp": "2026-02-06T01:45:49.797107+00:00"}
+{"message": "starting inference executor", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T01:45:49.806023+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 104338, "inference": true, "timestamp": "2026-02-06T01:45:51.180060+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 104338, "inference": true, "elapsed_time": 4.44, "timestamp": "2026-02-06T01:45:55.621934+00:00"}
+{"message": "HTTP server listening on :8081", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T01:45:55.624443+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 104355, "timestamp": "2026-02-06T01:45:55.632339+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 104357, "timestamp": "2026-02-06T01:45:55.640907+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 104355, "elapsed_time": 0.45, "timestamp": "2026-02-06T01:45:56.079872+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 104357, "elapsed_time": 0.45, "timestamp": "2026-02-06T01:45:56.094870+00:00"}
+{"message": "registered worker", "level": "INFO", "name": "livekit.agents", "agent_name": "", "id": "AW_Y6Rm6UHvxDNc", "url": "wss://healmind-y60bd0uc.livekit.cloud", "region": "US East B", "protocol": 16, "timestamp": "2026-02-06T01:45:56.315068+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8112022, "threshold": 0.7, "timestamp": "2026-02-06T01:54:38.988467+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.664118, "threshold": 0.7, "timestamp": "2026-02-06T01:54:48.991758+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7007094000000001, "threshold": 0.7, "timestamp": "2026-02-06T01:54:51.492471+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6449496000000001, "threshold": 0.7, "timestamp": "2026-02-06T01:54:53.993725+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7915338000000002, "threshold": 0.7, "timestamp": "2026-02-06T01:54:56.493915+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6142586, "threshold": 0.7, "timestamp": "2026-02-06T01:55:04.000125+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8031666000000002, "threshold": 0.7, "timestamp": "2026-02-06T01:55:09.001784+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6619182000000002, "threshold": 0.7, "timestamp": "2026-02-06T01:55:21.516372+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8161128000000003, "threshold": 0.7, "timestamp": "2026-02-06T01:55:24.017630+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.2906430000000002, "threshold": 0.7, "timestamp": "2026-02-06T01:55:29.021539+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7219092000000005, "threshold": 0.7, "timestamp": "2026-02-06T02:00:34.119947+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6879396000000007, "threshold": 0.7, "timestamp": "2026-02-06T02:00:44.124018+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7422382000000006, "threshold": 0.7, "timestamp": "2026-02-06T02:00:51.625671+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6913692000000005, "threshold": 0.7, "timestamp": "2026-02-06T02:00:56.626681+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8147430000000003, "threshold": 0.7, "timestamp": "2026-02-06T02:00:59.127260+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6905092000000004, "threshold": 0.7, "timestamp": "2026-02-06T02:01:01.636053+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8396658000000002, "threshold": 0.7, "timestamp": "2026-02-06T02:01:06.637415+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5768478, "threshold": 0.7, "timestamp": "2026-02-06T02:01:16.641235+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8764765999999998, "threshold": 0.7, "timestamp": "2026-02-06T02:01:19.140759+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5800477999999998, "threshold": 0.7, "timestamp": "2026-02-06T02:01:21.642758+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7822529999999995, "threshold": 0.7, "timestamp": "2026-02-06T02:04:41.710231+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6985535999999994, "threshold": 0.7, "timestamp": "2026-02-06T02:04:49.216146+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7254309999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:04:59.219565+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5556847999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:05:04.221514+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7291907999999997, "threshold": 0.7, "timestamp": "2026-02-06T02:05:06.723300+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6772867999999997, "threshold": 0.7, "timestamp": "2026-02-06T02:05:09.225782+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8364775999999997, "threshold": 0.7, "timestamp": "2026-02-06T02:05:11.726150+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6734706, "threshold": 0.7, "timestamp": "2026-02-06T02:05:24.233644+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8541882000000001, "threshold": 0.7, "timestamp": "2026-02-06T02:05:26.732399+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.0784960000000001, "threshold": 0.7, "timestamp": "2026-02-06T02:05:29.232990+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7208008000000004, "threshold": 0.7, "timestamp": "2026-02-06T02:05:36.734987+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6760312000000003, "threshold": 0.7, "timestamp": "2026-02-06T02:05:44.236666+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7727636000000004, "threshold": 0.7, "timestamp": "2026-02-06T02:05:46.737591+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.37704060000000006, "threshold": 0.7, "timestamp": "2026-02-06T02:06:04.242942+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8135436, "threshold": 0.7, "timestamp": "2026-02-06T02:06:06.743282+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6295930000000001, "threshold": 0.7, "timestamp": "2026-02-06T02:06:14.246766+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7982436000000002, "threshold": 0.7, "timestamp": "2026-02-06T02:06:16.747306+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5093816000000001, "threshold": 0.7, "timestamp": "2026-02-06T02:06:21.750114+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8078210000000002, "threshold": 0.7, "timestamp": "2026-02-06T02:06:26.752136+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.006999999999999773, "threshold": 0.7, "timestamp": "2026-02-06T02:06:54.259008+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8184081999999997, "threshold": 0.7, "timestamp": "2026-02-06T02:08:46.803936+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6216505999999995, "threshold": 0.7, "timestamp": "2026-02-06T02:08:49.305010+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8349999999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:08:54.305904+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6796419999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:08:56.807033+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8132955999999997, "threshold": 0.7, "timestamp": "2026-02-06T02:08:59.312574+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.2119143999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:09:01.809116+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7051263999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:32:04.770991+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6314045999999995, "threshold": 0.7, "timestamp": "2026-02-06T02:32:07.271416+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7311065999999995, "threshold": 0.7, "timestamp": "2026-02-06T02:32:09.772660+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6756983999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:32:14.774531+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8133871999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:32:17.277882+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.09489239999999968, "threshold": 0.7{"message": "starting worker", "level": "INFO", "name": "livekit.agents", "version": "1.3.11", "rtc-version": "1.0.23", "timestamp": "2026-02-06T02:37:02.761696+00:00"}
+{"message": "preloading plugins", "level": "INFO", "name": "livekit.agents", "packages": ["livekit.plugins.silero", "livekit.plugins.turn_detector", "av"], "timestamp": "2026-02-06T02:37:02.761891+00:00"}
+{"message": "starting inference executor", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T02:37:02.773448+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 1167, "inference": true, "timestamp": "2026-02-06T02:37:04.201204+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 1167, "inference": true, "elapsed_time": 8.53, "timestamp": "2026-02-06T02:37:12.733106+00:00"}
+{"message": "HTTP server listening on :8081", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T02:37:12.734847+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 1175, "timestamp": "2026-02-06T02:37:12.743284+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 1177, "timestamp": "2026-02-06T02:37:12.747036+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 1175, "elapsed_time": 0.37, "timestamp": "2026-02-06T02:37:13.113123+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 1177, "elapsed_time": 0.37, "timestamp": "2026-02-06T02:37:13.114915+00:00"}
+{"message": "registered worker", "level": "INFO", "name": "livekit.agents", "agent_name": "", "id": "AW_zNi8NEo2MspC", "url": "wss://healmind-y60bd0uc.livekit.cloud", "region": "US East B", "protocol": 16, "timestamp": "2026-02-06T02:37:13.134257+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7118342000000003, "threshold": 0.7, "timestamp": "2026-02-06T02:40:08.188837+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6910574, "threshold": 0.7, "timestamp": "2026-02-06T02:40:13.191462+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7334538000000002, "threshold": 0.7, "timestamp": "2026-02-06T02:40:28.196070+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5704392000000003, "threshold": 0.7, "timestamp": "2026-02-06T02:40:30.696710+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7923408000000001, "threshold": 0.7, "timestamp": "2026-02-06T02:40:35.698500+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5123300000000001, "threshold": 0.7, "timestamp": "2026-02-06T02:40:40.701035+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.759266, "threshold": 0.7, "timestamp": "2026-02-06T02:40:45.703393+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5297831999999991, "threshold": 0.7, "timestamp": "2026-02-06T02:41:13.212600+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7731953999999992, "threshold": 0.7, "timestamp": "2026-02-06T02:45:10.790911+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6441817999999991, "threshold": 0.7, "timestamp": "2026-02-06T02:45:20.793467+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7291773999999991, "threshold": 0.7, "timestamp": "2026-02-06T02:45:23.293934+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6434813999999992, "threshold": 0.7, "timestamp": "2026-02-06T02:45:25.794157+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7985933999999993, "threshold": 0.7, "timestamp": "2026-02-06T02:45:28.295036+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5825923999999992, "threshold": 0.7, "timestamp": "2026-02-06T02:45:55.805018+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7861727999999992, "threshold": 0.7, "timestamp": "2026-02-06T02:46:05.809890+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6851067999999992, "threshold": 0.7, "timestamp": "2026-02-06T02:46:10.810962+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7375423999999994, "threshold": 0.7, "timestamp": "2026-02-06T02:46:13.311883+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6893327999999995, "threshold": 0.7, "timestamp": "2026-02-06T02:46:25.821994+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8223793999999994, "threshold": 0.7, "timestamp": "2026-02-06T02:46:28.327457+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6308053999999995, "threshold": 0.7, "timestamp": "2026-02-06T02:46:38.333515+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7715671999999996, "threshold": 0.7, "timestamp": "2026-02-06T02:46:40.834034+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.4268807999999993, "threshold": 0.7, "timestamp": "2026-02-06T02:46:45.835645+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7490785999999993, "threshold": 0.7, "timestamp": "2026-02-06T02:46:50.836983+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.2579671999999992, "threshold": 0.7, "timestamp": "2026-02-06T02:47:13.346859+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7321617999999992, "threshold": 0.7, "timestamp": "2026-02-06T02:51:38.436652+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6795097999999993, "threshold": 0.7, "timestamp": "2026-02-06T02:51:50.940733+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7423335999999991, "threshold": 0.7, "timestamp": "2026-02-06T02:52:08.447165+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6975765999999989, "threshold": 0.7, "timestamp": "2026-02-06T02:52:15.949518+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8004105999999986, "threshold": 0.7, "timestamp": "2026-02-06T02:52:23.453557+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.5921315999999984, "threshold": 0.7, "timestamp": "2026-02-06T02:52:40.959514+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.8177053999999986, "threshold": 0.7, "timestamp": "2026-02-06T02:52:43.461043+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.6490761999999985, "threshold": 0.7, "timestamp": "2026-02-06T02:52:53.463753+00:00"}
+{"message": "draining worker", "level": "INFO", "name": "livekit.agents", "id": "AW_zNi8NEo2MspC", "timeout": 1800, "timestamp": "2026-02-06T06:36:05.235386+00:00"}
+{"message": "shutting down worker", "level": "INFO", "name": "livekit.agents", "id": "AW_zNi8NEo2MspC", "timestamp": "2026-02-06T06:36:05.235763+00:00"}
+{"message": "process exiting", "level": "INFO", "name": "livekit.agents", "reason": "", "pid": 1167, "inference": true, "timestamp": "2026-02-06T06:36:05.251703+00:00"}
+{"message": "starting worker", "level": "INFO", "name": "livekit.agents", "version": "1.3.11", "rtc-version": "1.0.23", "timestamp": "2026-02-06T06:36:10.613780+00:00"}
+{"message": "preloading plugins", "level": "INFO", "name": "livekit.agents", "packages": ["livekit.plugins.silero", "livekit.plugins.turn_detector", "av"], "timestamp": "2026-02-06T06:36:10.614038+00:00"}
+{"message": "starting inference executor", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T06:36:10.621380+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 4213, "inference": true, "timestamp": "2026-02-06T06:36:12.055153+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 4213, "inference": true, "elapsed_time": 6.74, "timestamp": "2026-02-06T06:36:18.793951+00:00"}
+{"message": "HTTP server listening on :8081", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T06:36:18.795282+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 4221, "timestamp": "2026-02-06T06:36:18.802384+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 4223, "timestamp": "2026-02-06T06:36:18.806368+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 4223, "elapsed_time": 0.32, "timestamp": "2026-02-06T06:36:19.127089+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 4221, "elapsed_time": 0.33, "timestamp": "2026-02-06T06:36:19.127840+00:00"}
+{"message": "registered worker", "level": "INFO", "name": "livekit.agents", "agent_name": "", "id": "AW_DmyvAduuTfZA", "url": "wss://healmind-y60bd0uc.livekit.cloud", "region": "US East B", "protocol": 16, "timestamp": "2026-02-06T06:36:19.148800+00:00"}
+{"message": "worker is at full capacity, marking as unavailable", "level": "INFO", "name": "livekit.agents", "load": 0.7271504, "threshold": 0.7, "timestamp": "2026-02-06T07:46:33.016840+00:00"}
+{"message": "worker is below capacity, marking as available", "level": "INFO", "name": "livekit.agents", "load": 0.4957560000000001, "threshold": 0.7, "timestamp": "2026-02-06T07:46:35.517358+00:00"}
+{"message": "draining worker", "level": "INFO", "name": "livekit.agents", "id": "AW_DmyvAduuTfZA", "timeout": 1800, "timestamp": "2026-02-06T15:28:42.751702+00:00"}
+{"message": "shutting down worker", "level": "INFO", "name": "livekit.agents", "id": "AW_DmyvAduuTfZA", "timestamp": "2026-02-06T15:28:42.752207+00:00"}
+{"message": "process exiting", "level": "INFO", "name": "livekit.agents", "reason": "", "pid": 4213, "inference": true, "timestamp": "2026-02-06T15:28:42.770407+00:00"}
+{"message": "starting worker", "level": "INFO", "name": "livekit.agents", "version": "1.3.11", "rtc-version": "1.0.23", "timestamp": "2026-02-06T15:28:44.877082+00:00"}
+{"message": "preloading plugins", "level": "INFO", "name": "livekit.agents", "packages": ["livekit.plugins.silero", "livekit.plugins.turn_detector", "av"], "timestamp": "2026-02-06T15:28:44.877288+00:00"}
+{"message": "starting inference executor", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T15:28:44.880455+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 8611, "inference": true, "timestamp": "2026-02-06T15:28:46.255306+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 8611, "inference": true, "elapsed_time": 3.47, "timestamp": "2026-02-06T15:28:49.730406+00:00"}
+{"message": "HTTP server listening on :8081", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T15:28:49.732582+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 8619, "timestamp": "2026-02-06T15:28:49.739617+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 8621, "timestamp": "2026-02-06T15:28:49.747156+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 8619, "elapsed_time": 0.41, "timestamp": "2026-02-06T15:28:50.154118+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 8621, "elapsed_time": 0.41, "timestamp": "2026-02-06T15:28:50.162183+00:00"}
+{"message": "registered worker", "level": "INFO", "name": "livekit.agents", "agent_name": "", "id": "AW_g9MmjZXH2YX4", "url": "wss://healmind-y60bd0uc.livekit.cloud", "region": "US East B", "protocol": 16, "timestamp": "2026-02-06T15:28:50.183591+00:00"}
+{"message": "draining worker", "level": "INFO", "name": "livekit.agents", "id": "AW_g9MmjZXH2YX4", "timeout": 1800, "timestamp": "2026-02-06T15:51:06.627173+00:00"}
+{"message": "shutting down worker", "level": "INFO", "name": "livekit.agents", "id": "AW_g9MmjZXH2YX4", "timestamp": "2026-02-06T15:51:06.627702+00:00"}
+{"message": "process exiting", "level": "INFO", "name": "livekit.agents", "reason": "", "pid": 8611, "inference": true, "timestamp": "2026-02-06T15:51:06.644109+00:00"}
+{"message": "starting worker", "level": "INFO", "name": "livekit.agents", "version": "1.3.11", "rtc-version": "1.0.23", "timestamp": "2026-02-06T15:52:44.663558+00:00"}
+{"message": "preloading plugins", "level": "INFO", "name": "livekit.agents", "packages": ["livekit.plugins.silero", "livekit.plugins.turn_detector", "av"], "timestamp": "2026-02-06T15:52:44.663746+00:00"}
+{"message": "starting inference executor", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T15:52:44.666921+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 9163, "inference": true, "timestamp": "2026-02-06T15:52:46.023616+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 9163, "inference": true, "elapsed_time": 3.43, "timestamp": "2026-02-06T15:52:49.450107+00:00"}
+{"message": "HTTP server listening on :8081", "level": "INFO", "name": "livekit.agents", "timestamp": "2026-02-06T15:52:49.452259+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 9171, "timestamp": "2026-02-06T15:52:49.459155+00:00"}
+{"message": "initializing process", "level": "INFO", "name": "livekit.agents", "pid": 9173, "timestamp": "2026-02-06T15:52:49.464506+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 9171, "elapsed_time": 0.4, "timestamp": "2026-02-06T15:52:49.863930+00:00"}
+{"message": "process initialized", "level": "INFO", "name": "livekit.agents", "pid": 9173, "elapsed_time": 0.41, "timestamp": "2026-02-06T15:52:49.875809+00:00"}
+{"message": "registered worker", "level": "INFO", "name": "livekit.agents", "agent_name": "", "id": "AW_jRzVDM2TQxPL", "url": "wss://healmind-y60bd0uc.livekit.cloud", "region": "US East B", "protocol": 16, "timestamp": "2026-02-06T15:52:49.895964+00:00"}
