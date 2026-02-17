@@ -31,6 +31,12 @@ interface AppProps {
 export function App({ appConfig }: AppProps) {
   const [promptDialogOpen, setPromptDialogOpen] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
+  const [selectedLlmModel, setSelectedLlmModel] = useState<'openai/gpt-4o' | 'google/gemini-2.5-flash'>(
+    'openai/gpt-4o'
+  );
+  const [selectedTtsModel, setSelectedTtsModel] = useState<
+    'deepgram/aura-2:Arcas' | 'elevenlabs/eleven_multilingual_v2'
+  >('elevenlabs/eleven_multilingual_v2');
   const openRequestIdRef = useRef<string | null>(null);
 
   const tokenSource = useMemo(() => {
@@ -56,6 +62,8 @@ export function App({ appConfig }: AppProps) {
           participant_name: options.participantName,
           participant_metadata: JSON.stringify({
             prompt: customPrompt,
+            llm: selectedLlmModel,
+            tts: selectedTtsModel,
           }),
           room_config: appConfig.agentName
             ? {
@@ -82,7 +90,7 @@ export function App({ appConfig }: AppProps) {
         participantName: data.participantName,
       };
     });
-  }, [appConfig, customPrompt]);
+  }, [appConfig, customPrompt, selectedLlmModel, selectedTtsModel]);
 
   const session = useSession(tokenSource);
 
@@ -177,6 +185,8 @@ export function App({ appConfig }: AppProps) {
       await local.setMetadata(
         JSON.stringify({
           prompt: customPrompt,
+          llm: selectedLlmModel,
+          tts: selectedTtsModel,
         })
       );
       toast.success('Prompt updated');
@@ -227,6 +237,44 @@ export function App({ appConfig }: AppProps) {
               you&apos;re already connected, saving will update it immediately.
             </p>
 
+            <div className="mb-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+              <label className="flex flex-col gap-2 text-sm">
+                <span className="text-muted-foreground">LLM model</span>
+                <select
+                  className="bg-background focus:ring-ring w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+                  value={selectedLlmModel}
+                  onChange={(e) =>
+                    setSelectedLlmModel(
+                      e.target.value as 'openai/gpt-4o' | 'google/gemini-2.5-flash'
+                    )
+                  }
+                >
+                  <option value="openai/gpt-4o">openai/gpt-4o</option>
+                  <option value="google/gemini-2.5-flash">google/gemini-2.5-flash</option>
+                </select>
+              </label>
+
+              <label className="flex flex-col gap-2 text-sm">
+                <span className="text-muted-foreground">TTS voice</span>
+                <select
+                  className="bg-background focus:ring-ring w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2"
+                  value={selectedTtsModel}
+                  onChange={(e) =>
+                    setSelectedTtsModel(
+                      e.target.value as
+                        | 'deepgram/aura-2:Arcas'
+                        | 'elevenlabs/eleven_multilingual_v2'
+                    )
+                  }
+                >
+                  <option value="deepgram/aura-2:Arcas">deepgram/aura-2:Arcas</option>
+                  <option value="elevenlabs/eleven_multilingual_v2">
+                    elevenlabs/eleven_multilingual_v2
+                  </option>
+                </select>
+              </label>
+            </div>
+
             <textarea
               className="bg-background focus:ring-ring min-h-40 w-full rounded-md border p-3 text-sm outline-none focus:ring-2"
               placeholder="Enter a custom system prompt / instructions for the agent..."
@@ -248,6 +296,7 @@ export function App({ appConfig }: AppProps) {
               </Button>
             </div>
           </div>
+
         </div>
       ) : null}
 
