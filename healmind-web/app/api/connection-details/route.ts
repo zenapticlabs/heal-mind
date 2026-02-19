@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { AccessToken, type AccessTokenOptions, type VideoGrant } from 'livekit-server-sdk';
 import { RoomConfiguration } from '@livekit/protocol';
 
-// import { APP_CONFIG_DEFAULTS } from '@'
-
 type ConnectionDetails = {
   serverUrl: string;
   roomName: string;
@@ -54,7 +52,6 @@ export async function POST(req: Request) {
     }
 
     // Parse request body according to LiveKit endpoint token schema.
-    // https://docs.livekit.io/frontends/authentication/tokens/endpoint/#endpoint-schema
     const body = (await req.json().catch(() => ({}))) as EndpointTokenRequest;
     // const agentName = getAgentName(body.room_config);
 
@@ -63,6 +60,7 @@ export async function POST(req: Request) {
       body.participant_identity ?? `voice_assistant_user_${Math.floor(Math.random() * 10_000)}`;
     const roomName = body.room_name ?? `voice_assistant_room_${Math.floor(Math.random() * 10_000)}`;
 
+    // Use server-side AGENT_NAME env var
     const participantToken = await createParticipantToken(
       {
         identity: participantIdentity,
@@ -108,8 +106,6 @@ function createParticipantToken(
     canPublish: true,
     canPublishData: true,
     canSubscribe: true,
-    // Required to allow the web client to change its own participant metadata/attributes
-    // mid-session (e.g., to update prompt overrides without reconnecting).
     canUpdateOwnMetadata: true,
   };
   at.addGrant(grant);
