@@ -18,6 +18,18 @@ type EndpointTokenRequest = {
   room_config?: unknown;
 };
 
+// function getAgentName(roomConfig: unknown): string | undefined {
+//   if (roomConfig && typeof roomConfig === 'object') {
+//     const agents = (roomConfig as { agents?: unknown }).agents;
+//     if (Array.isArray(agents)) {
+//       const first = agents[0] as { agent_name?: unknown } | undefined;
+//       const name = first?.agent_name;
+//       if (typeof name === 'string') return name;
+//     }
+//   }
+//   return undefined;
+// }
+
 // NOTE: you are expected to define the following environment variables in `.env.local`:
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
@@ -41,6 +53,7 @@ export async function POST(req: Request) {
 
     // Parse request body according to LiveKit endpoint token schema.
     const body = (await req.json().catch(() => ({}))) as EndpointTokenRequest;
+    // const agentName = getAgentName(body.room_config);
 
     const participantName = body.participant_name ?? 'user';
     const participantIdentity =
