@@ -31,12 +31,12 @@ interface AppProps {
 export function App({ appConfig }: AppProps) {
   const [promptDialogOpen, setPromptDialogOpen] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
-  const [selectedLlmModel, setSelectedLlmModel] = useState<'openai/gpt-4o' | 'google/gemini-2.5-flash'>(
+  const [selectedLlmModel, setSelectedLlmModel] = useState<'openai/gpt-4o' | 'google/gemini-2.5-flash' | 'anthropic/claude-3-5-sonnet-20241022'>(
     'openai/gpt-4o'
   );
   const [selectedTtsModel, setSelectedTtsModel] = useState<
-    'deepgram/aura-2:Arcas' | 'elevenlabs/eleven_multilingual_v2'
-  >('elevenlabs/eleven_multilingual_v2');
+    'deepgram/aura-2:odysseus' | 'elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B'
+  >('elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B');
   const openRequestIdRef = useRef<string | null>(null);
 
   const tokenSource = useMemo(() => {
@@ -245,11 +245,12 @@ export function App({ appConfig }: AppProps) {
                   value={selectedLlmModel}
                   onChange={(e) =>
                     setSelectedLlmModel(
-                      e.target.value as 'openai/gpt-4o' | 'google/gemini-2.5-flash'
+                      e.target.value as 'openai/gpt-4o' | 'google/gemini-2.5-flash' | 'anthropic/claude-3-5-sonnet-20241022'
                     )
                   }
                 >
                   <option value="openai/gpt-4o">openai/gpt-4o</option>
+                  {/* <option value="anthropic/claude-3-5-sonnet-20241022">anthropic/claude-3-5-sonnet</option> */}
                   <option value="google/gemini-2.5-flash">google/gemini-2.5-flash</option>
                 </select>
               </label>
@@ -262,14 +263,14 @@ export function App({ appConfig }: AppProps) {
                   onChange={(e) =>
                     setSelectedTtsModel(
                       e.target.value as
-                        | 'deepgram/aura-2:Arcas'
-                        | 'elevenlabs/eleven_multilingual_v2'
+                        | 'deepgram/aura-2:odysseus'
+                        | 'elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B'
                     )
                   }
                 >
-                  <option value="deepgram/aura-2:Arcas">deepgram/aura-2:Arcas</option>
-                  <option value="elevenlabs/eleven_multilingual_v2">
-                    elevenlabs/eleven_multilingual_v2
+                  {/* <option value="deepgram/aura-2:odysseus">deepgram/aura-2:odysseus</option> */}
+                  <option value="elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B">
+                    elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B
                   </option>
                 </select>
               </label>

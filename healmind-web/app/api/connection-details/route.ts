@@ -20,22 +20,23 @@ type EndpointTokenRequest = {
   room_config?: unknown;
 };
 
-function getAgentName(roomConfig: unknown): string | undefined {
-  if (roomConfig && typeof roomConfig === 'object') {
-    const agents = (roomConfig as { agents?: unknown }).agents;
-    if (Array.isArray(agents)) {
-      const first = agents[0] as { agent_name?: unknown } | undefined;
-      const name = first?.agent_name;
-      if (typeof name === 'string') return name;
-    }
-  }
-  return undefined;
-}
+// function getAgentName(roomConfig: unknown): string | undefined {
+//   if (roomConfig && typeof roomConfig === 'object') {
+//     const agents = (roomConfig as { agents?: unknown }).agents;
+//     if (Array.isArray(agents)) {
+//       const first = agents[0] as { agent_name?: unknown } | undefined;
+//       const name = first?.agent_name;
+//       if (typeof name === 'string') return name;
+//     }
+//   }
+//   return undefined;
+// }
 
 // NOTE: you are expected to define the following environment variables in `.env.local`:
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
 const LIVEKIT_URL = process.env.LIVEKIT_URL;
+const AGENT_NAME = process.env.AGENT_NAME;
 
 // don't cache the results
 export const revalidate = 0;
@@ -55,7 +56,7 @@ export async function POST(req: Request) {
     // Parse request body according to LiveKit endpoint token schema.
     // https://docs.livekit.io/frontends/authentication/tokens/endpoint/#endpoint-schema
     const body = (await req.json().catch(() => ({}))) as EndpointTokenRequest;
-    const agentName = getAgentName(body.room_config);
+    // const agentName = getAgentName(body.room_config);
 
     const participantName = body.participant_name ?? 'user';
     const participantIdentity =
@@ -70,7 +71,7 @@ export async function POST(req: Request) {
         attributes: body.participant_attributes,
       },
       roomName,
-      agentName
+      AGENT_NAME
     );
 
     // Return connection details
