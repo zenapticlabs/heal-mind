@@ -15,7 +15,7 @@ from livekit.agents import (
     inference,
     room_io,
 )
-from livekit.plugins import noise_cancellation, silero, elevenlabs
+from livekit.plugins import noise_cancellation, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 logger = logging.getLogger("agent")
@@ -48,35 +48,8 @@ system_prompt = _read_prompt_file()
 
 # Current active prompt for the room/session (may be overridden by participant metadata).
 current_prompt = system_prompt
-current_llm_model = "openai/gpt-4o"
-# IMPORTANT: LiveKit Inference expects ElevenLabs TTS as either:
-#   - a descriptor string:  "elevenlabs/eleven_turbo_v2_5:<voice_id>"
-#   - OR inference.TTS(model="elevenlabs/eleven_turbo_v2_5", voice="<voice_id>")
-# Passing a colon-delimited model into inference.TTS(model=...) will be treated
-# as the *model id* and can cause "model not found" errors.
-current_tts_model = "elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B"
-
-
-def _parse_inference_tts_descriptor(value: str | None) -> tuple[str, str] | None:
-    """Parse a LiveKit Inference TTS descriptor string into (model, voice).
-
-    Expected format: "provider/model:voice".
-    Returns None if it can't be parsed.
-    """
-
-    if not value or not isinstance(value, str):
-        return None
-    s = value.strip()
-    if not s:
-        return None
-    if ":" not in s:
-        return None
-    model, voice = s.split(":", 1)
-    model = model.strip()
-    voice = voice.strip()
-    if not model or not voice:
-        return None
-    return model, voice
+current_llm_model = 'openai/gpt-4o'
+current_tts_model = 'elevenlabs/eleven_multilingual_v2'
 
 
 class SilenceNudger:
@@ -263,9 +236,9 @@ async def my_agent(ctx: JobContext):
     # heavier pipelines like avatar + TTS/STT.
     await ctx.connect()
 
-    def _extract_prompt_override(metadata: str | None):
+    def _extract_prompt_override(metadata: str | None) -> str | None:
         if not metadata:
-            return None, None, None
+            return None
         try:
             meta = json.loads(metadata)
             if not isinstance(meta, dict):
@@ -318,11 +291,10 @@ async def my_agent(ctx: JobContext):
         current_llm_model = llm_model_override if llm_model_override else current_llm_model
 
         # Persist the latest prompt to prompt.txt (source of truth across restarts).
-        
+        _write_prompt_file(current_prompt)
 
         # Update live LLM instructions for the current room session.
         if prompt_override:
-            _write_prompt_file(current_prompt)
             ctx.room.agent.llm.set_instructions(current_prompt)
         if llm_model_override:
             ctx.room.agent.llm.set_model(current_llm_model)
@@ -404,12 +376,7 @@ async def my_agent(ctx: JobContext):
     session = AgentSession(
         stt=inference.STT(model="elevenlabs/scribe_v2_realtime"),
         llm=inference.LLM(model=current_llm_model),
-        tts=(
-            (lambda mv: inference.TTS(model=mv[0], voice=mv[1]))(
-                _parse_inference_tts_descriptor(current_tts_model)
-                or ("elevenlabs/eleven_turbo_v2_5", "iP95p4xoKVk53GoZ742B")
-            )
-        ),
+        tts=inference.TTS(model=current_tts_model),
         turn_detection=MultilingualModel(),
         vad=ctx.proc.userdata["vad"],
         preemptive_generation=True,
