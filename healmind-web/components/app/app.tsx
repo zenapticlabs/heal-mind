@@ -35,7 +35,7 @@ export function App({ appConfig }: AppProps) {
     'openai/gpt-4o'
   );
   const [selectedTtsModel, setSelectedTtsModel] = useState<
-    'deepgram/aura-2:odysseus' | 'elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B'
+    'deepgram/aura-2:odysseus' | 'elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B' | 'elevenlabs/eleven_turbo_v2_5:IKne3meq5aSn9XLyUdCD'
   >('elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B');
   const openRequestIdRef = useRef<string | null>(null);
 
@@ -263,14 +263,17 @@ export function App({ appConfig }: AppProps) {
                   onChange={(e) =>
                     setSelectedTtsModel(
                       e.target.value as
-                        | 'deepgram/aura-2:odysseus'
+                        | 'elevenlabs/eleven_turbo_v2_5:IKne3meq5aSn9XLyUdCD'
                         | 'elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B'
                     )
                   }
                 >
                   {/* <option value="deepgram/aura-2:odysseus">deepgram/aura-2:odysseus</option> */}
                   <option value="elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B">
-                    elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B
+                    elevenlabs - Chris
+                  </option>
+                  <option value="elevenlabs/eleven_turbo_v2_5:IKne3meq5aSn9XLyUdCD">
+                    elevenlabs - Charlie
                   </option>
                 </select>
               </label>
