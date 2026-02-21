@@ -8,15 +8,18 @@ npm i -g pm2
 ```
 #### Launch healmind agent:
 ```
+sudo apt update
+sudo apt install python3.12-venv
+python3 -m venv .venv
 source .venv/bin/activate
-uv sync
+pip install -r requirements.txt
 pm2 start .venv/bin/python --name healmind-agent --interpreter none -- src/agent.py start
 ```
 #### Launch healmind web app:
 ```
 pnpm install
 pnpm build
-pm2 start "$(command -v pnpm)" --name myapp --interpreter bash -- start
+pm2 start "$(command -v pnpm)" --name healmind-web --interpreter bash -- start
 ```
 
 #### Get logs:
@@ -34,7 +37,7 @@ pm2 logs healmind-web
 pm2 logs healmind-web --err
 
 # 5) show the last N lines (useful if logs are noisy)
-pm2 logs healmind-web --lines 200
+pm2 logs healmind-agent --lines 200
 ```
 #### Download Logs:
 ```

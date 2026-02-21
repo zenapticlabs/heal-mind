@@ -250,7 +250,7 @@ export function App({ appConfig }: AppProps) {
                   }
                 >
                   <option value="openai/gpt-4o">openai/gpt-4o</option>
-                  {/* <option value="anthropic/claude-3-5-sonnet-20241022">anthropic/claude-3-5-sonnet</option> */}
+                  <option value="anthropic/claude-3-5-sonnet-20241022">anthropic/claude-3-5-sonnet</option>
                   <option value="google/gemini-2.5-flash">google/gemini-2.5-flash</option>
                 </select>
               </label>
