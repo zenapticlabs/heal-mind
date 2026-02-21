@@ -10,7 +10,7 @@ npm i -g pm2
 ```
 source .venv/bin/activate
 uv sync
-pm2 start .venv/bin/python --name healmind-agent --interpreter none -- src/agent.py start
+pm2 start .venv/bin/python --name healmind-agent --interpreter none -- src/agent.py dev
 ```
 #### Launch healmind web app:
 ```
