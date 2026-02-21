@@ -16,7 +16,7 @@ pm2 start .venv/bin/python --name healmind-agent --interpreter none -- src/agent
 ```
 pnpm install
 pnpm build
-pm2 start "$(command -v pnpm)" --name myapp --interpreter bash -- start
+pm2 start "$(command -v pnpm)" --name healmind-web --interpreter bash -- start
 ```
 
 #### Get logs:
