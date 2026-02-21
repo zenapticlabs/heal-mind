@@ -218,7 +218,7 @@ export function App({ appConfig }: AppProps) {
         await requestPromptFromAgent();
           }}
         >
-          Edit Prompt
+          Edit
         </Button>
       </div>
 
